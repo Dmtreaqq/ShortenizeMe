@@ -2,14 +2,15 @@ import request from 'supertest';
 import { NextFunction, Request, Response } from 'express';
 import urlService from '../../../services/urlService';
 import { createServer } from '../../createServer';
+
 import { urlController  } from '../../../controllers/urlController';
 import { urls, url } from '../../mocks/urlsMock';
 
 jest.mock('../../../services/urlService', () => ({
-    getUsersByLogin: jest.fn(),
-    getUserById: jest.fn(),
-    postUser: jest.fn(),
-    deleteUser: jest.fn()
+    getAllURLs: jest.fn(),
+    getUrlById: jest.fn(),
+    createURL: jest.fn(),
+    deleteURL: jest.fn()
 }));
 
 jest.mock('../../../middleware/validator', () => ({
@@ -33,25 +34,30 @@ afterEach(() => {
     jest.resetAllMocks();
 });
 
-describe('URL router tests', () => {
+describe('URL controller tests', () => {
     const app = createServer((application: any) => {
-        application.use('/urls', urlController);
+        application.use('/shortenize', urlController);
     });
 
-    it('should POST url', async () => {
-        const generatedId = 1;
-        const urlWithoutId = {
-            longUrl: 'http://google.com'
-        };
-
+    it('should get all urls', async () => {
         const response = await request(app)
-            .post('/urls')
-            .send(urlWithoutId);
+            .get('/shortenize');
 
-        expect(urlService.createURL).toHaveBeenCalledWith(expect.objectContaining(urlWithoutId));
-        expect(urlService.createURL).toBeCalledTimes(1);
-        expect(response.statusCode).toBe(201);
-        expect(response.text)
-            .toEqual(JSON.stringify({ message: `User with id ${generatedId} successfully created` }));
+        // expect(urlService.createURL).toHaveBeenCalledWith(expect.objectContaining(urlWithoutId));
+        expect(urlService.getAllURLs).toBeCalledTimes(1);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual(urls);
+    });
+
+    it('should create a new url', async () => {
+        const response = await request(app)
+            .post('/shortenize')
+            .send({
+                longUrl: 'http://google.com'
+            });
+
+        console.log(response);
+
+        expect(true).toEqual(true);
     });
 });

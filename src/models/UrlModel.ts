@@ -1,5 +1,5 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../loaders/db';
+import { sequelize } from '../loaders/postgresdb';
 import logger from '../middleware/logger';
 
 export interface IURLModel extends Model<InferAttributes<IURLModel>, InferCreationAttributes<IURLModel>> {

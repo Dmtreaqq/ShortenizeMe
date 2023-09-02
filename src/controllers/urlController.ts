@@ -17,7 +17,7 @@ urlController.param('id', async (req: Request, res: Response, next, id) => {
     if (url) req.customUrl = url;
     else {
         res.status(404);
-        return res.json({ message: `Url with id ${id} was not found` });
+        return res.json({ message: `URL with id ${id} was not found` });
     }
     next();
 });

@@ -1,6 +1,6 @@
 import { app } from './app';
 import config from './config/index';
-import { sequelize } from './loaders/db';
+import { sequelize } from './loaders/postgresdb';
 import { terminate } from './utils/terminateServer';
 import { redis } from './loaders/redis';
 
