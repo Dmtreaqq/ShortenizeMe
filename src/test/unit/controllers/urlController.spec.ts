@@ -43,21 +43,20 @@ describe('URL controller tests', () => {
         const response = await request(app)
             .get('/shortenize');
 
-        // expect(urlService.createURL).toHaveBeenCalledWith(expect.objectContaining(urlWithoutId));
         expect(urlService.getAllURLs).toBeCalledTimes(1);
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual(urls);
     });
 
-    it('should create a new url', async () => {
-        const response = await request(app)
-            .post('/shortenize')
-            .send({
-                longUrl: 'http://google.com'
-            });
-
-        console.log(response);
-
-        expect(true).toEqual(true);
-    });
+    // it('should create a new url', async () => {
+    //     const response = await request(app)
+    //         .post('/shortenize')
+    //         .send({
+    //             longUrl: 'http://google.com'
+    //         });
+    //
+    //     console.log(response);
+    //
+    //     expect(true).toEqual(true);
+    // });
 });
