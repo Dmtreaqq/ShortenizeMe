@@ -1,0 +1,34 @@
+version: '3.0'
+
+services:
+  node-app:
+    container_name: ShortenerApp
+    build:
+      context: .
+    env_file:
+      - .env.local
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+      - 9229:9229
+    command: npm run dev
+    depends_on:
+      - postgres
+    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    env_file:
+      - .env.local
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+      POSTGRES_PASSWORD: root
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+volumes:
+  pgdata:
