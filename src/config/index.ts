@@ -7,5 +7,6 @@ export default {
     dbUserName: process.env.DB_USERNAME,
     dbPass: process.env.DB_PASS,
     dbHost: process.env.DB_HOST,
-    redirectUrl: process.env.REDIRECTION_URL
+    redirectUrl: process.env.REDIRECTION_URL,
+    redisHost: process.env.REDIS_HOST
 };
