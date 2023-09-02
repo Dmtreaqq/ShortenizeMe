@@ -27,13 +27,6 @@ urlController.route('/')
         try {
             const urls = await urlService.getAllURLs();
 
-            if (urls && urls[0].id) {
-                const hash = hashids.encode(urls[0].id);
-                const shortUrl = `${config.redirectUrl}/${hash}`;
-
-                console.log('value: ', await redisService.getValue(shortUrl));
-            }
-
             return res.json(urls);
         } catch (err) {
             if (err && err instanceof Error) {
