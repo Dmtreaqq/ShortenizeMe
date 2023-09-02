@@ -5,6 +5,7 @@ import { UserRequestSchema, validator } from '../middleware/validator';
 import { URLValidationSchema } from '../schemas/URL';
 import { URL } from '../types/URL';
 import urlService from '../services/urlService';
+import redisService from '../services/redisService';
 import config from '../config';
 
 export const urlController = express.Router();
@@ -25,6 +26,14 @@ urlController.route('/')
     .get(async (req: Request, res: Response) => {
         try {
             const urls = await urlService.getAllURLs();
+
+            if (urls && urls[0].id) {
+                const hash = hashids.encode(urls[0].id);
+                const shortUrl = `${config.redirectUrl}/${hash}`;
+
+                console.log('value: ', await redisService.getValue(shortUrl));
+            }
+
             return res.json(urls);
         } catch (err) {
             if (err && err instanceof Error) {
@@ -40,8 +49,12 @@ urlController.route('/')
                 const createdUrl = await urlService.createURL(url);
                 if (createdUrl && createdUrl.id) {
                     const hash = hashids.encode(createdUrl.id);
+                    const shortUrl = `${config.redirectUrl}/${hash}`;
+
+                    await redisService.setValue(shortUrl, createdUrl.longUrl);
+
                     res.status(201);
-                    return res.json({ ...createdUrl, shortUrl: `${config.redirectUrl}/${hash}` });
+                    return res.json({ ...createdUrl, shortUrl });
                 }
             } catch (err) {
                 if (err && err instanceof Error) {
